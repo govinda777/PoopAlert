@@ -292,7 +292,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun takePhoto() {
         // Lógica para capturar foto usando ImageCapture e salvar na pasta.
-        // Implementação detalhada no MVP final dependerá do armazenamento Android (MediaStore).
+        // O armazenamento depende de APIs do Android como MediaStore (para Android 10+)
+        // ou salvamento direto em pasta pública usando WRITE_EXTERNAL_STORAGE (Android 9 ou inferior).
         Toast.makeText(this, "Foto coletada!", Toast.LENGTH_SHORT).show()
     }
 
@@ -471,10 +472,12 @@ class ObjectDetectorHelper(
 
 O script abaixo utiliza Python e a biblioteca **Ultralytics** para treinar a sua base de dados rotulada (exportada do Roboflow em formato YOLO) usando o modelo YOLOv11n (ou YOLOv8n) e, em seguida, exportar o modelo para TFLite (TensorFlow Lite), adequado para o Android.
 
+**Importante:** Este script Python **não** roda no celular Android. Ele deve ser executado no seu computador pessoal (PC/Mac) ou em um ambiente de nuvem gratuito, como o **Google Colab** (recomendado, pois oferece GPU gratuita, o que acelera muito o treinamento).
+
 ### 5.1 `train_export_yolo.py`
 
 ```python
-# Instalação das dependências (execute no terminal ou Google Colab):
+# Instalação das dependências (execute no terminal do seu PC ou em uma célula do Google Colab):
 # pip install ultralytics
 
 from ultralytics import YOLO
