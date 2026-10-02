@@ -474,7 +474,27 @@ O script abaixo utiliza Python e a biblioteca **Ultralytics** para treinar a sua
 
 **Importante:** Este script Python **não** roda no celular Android. Ele deve ser executado no seu computador pessoal (PC/Mac) ou em um ambiente de nuvem gratuito, como o **Google Colab** (recomendado, pois oferece GPU gratuita, o que acelera muito o treinamento).
 
-### 5.1 `train_export_yolo.py`
+### 5.1 O Ciclo de Vida dos Dados (Como integrar as fotos com a IA)
+
+Para que fique perfeitamente claro como os dados saem do aplicativo e viram um modelo de inteligência artificial, siga este passo a passo do fluxo de trabalho:
+
+**1. Extraindo as fotos do celular:**
+Após usar o **Modo de Coleta de Dados** do seu aplicativo (Fase 2), o celular estará cheio de fotos do ambiente (com e sem dejetos).
+Conecte o celular antigo ao seu PC via cabo USB, navegue até a pasta pública onde o app salvou as imagens (geralmente em `DCIM` ou `Pictures`) e copie todas para o seu computador.
+
+**2. Rotulando e Organizando (Roboflow):**
+Acesse o site **Roboflow**, crie um projeto e faça o upload de todas as fotos que você copiou do celular. Lá, você desenhará "caixinhas" (bounding boxes) ao redor dos dejetos em cada foto e dará o nome da classe (`dog_poop`). Quando terminar, o Roboflow permitirá que você exporte esse dataset (conjunto de dados) no formato "YOLO".
+
+**3. Treinando a IA (Google Colab/PC):**
+Agora entra o script Python abaixo. Você fará o download do dataset exportado do Roboflow e rodará este script (preferencialmente no Google Colab, que é gratuito e rápido). O script vai "estudar" as imagens rotuladas.
+
+**4. O Elo Final (Arquivo `.tflite`):**
+Ao final do treinamento, o script vai gerar um arquivo chamado `best_full_integer_quant.tflite` (ou similar). **Este é o cérebro da sua IA.**
+Você pegará este arquivo gerado, vai renomeá-lo para `model.tflite` e vai colá-lo dentro do seu projeto Android Studio, especificamente na pasta `app/src/main/assets/`.
+
+Quando você compilar o aplicativo de novo (clicar em *Run*), o código Kotlin que criamos vai carregar esse modelo da pasta assets e o Modo Sentinela começará a funcionar usando a inteligência treinada!
+
+### 5.2 `train_export_yolo.py`
 
 ```python
 # Instalação das dependências (execute no terminal do seu PC ou em uma célula do Google Colab):
